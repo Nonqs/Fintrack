@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    height: 100vh;
+}
+
+select {
+    border: none;
+    outline: none !important;
+  }
