@@ -1,9 +1,11 @@
+"use client"
 import {
     Autocomplete,
     AutocompleteSection,
     AutocompleteItem
 } from "@nextui-org/autocomplete";
-import { Input } from "@nextui-org/react";
+import { Divider, Input, Select, SelectItem } from "@nextui-org/react";
+import Link from "next/link";
 
 const incomes = [
     "income",
@@ -22,27 +24,43 @@ const accounts = [
 export default function IncomeForm() {
 
     return (
-        <div className="bg-amber-300">
-            <h4 className="text-[#175023] text-xl font-semibold">New income</h4>
+        <div>
+            <Link href={"/incomes"}>
+                <div>
+                    <h4 className="text-[#4ade80] text-xl font-semibold">New income</h4>
+                    <Divider className="mb-2 mt-1" />
+                </div>
+            </Link>
             <form>
-                <div className="flex border">
-                    <div className="flex border-2 rounded-3xl overflow-hidden">
-                        <select className="w-1/5">
-                            {accounts.map(account =>(
-                                <option key={account} value="income">{account}</option>
+                <div className="flex">
+                    <div className="flex w-full">
+                        <Select
+                            size="sm"
+                            variant={"underlined"}
+                            label="Account"
+                            className="max-w-xs w-3/5" >
+                            {accounts.map(account => (
+                                <SelectItem key={account} value="income">{account}</SelectItem>
                             ))}
-                        </select>
-                        <input 
-                        className="w-1/5" 
-                        type="number"
-                        placeholder="$"
-                         />
-                         <select className="w-1/5">
-                            {incomes.map(income =>(
-                                <option key={income} value={income}>{income}</option>
+                        </Select>
+                        <Select
+                            size="sm"
+                            variant={"underlined"}
+                            label="Income"
+                            className="max-w-xs w-3/5"
+                        >
+                            {incomes.map(income => (
+                                <SelectItem className="outline-0" key={income} value={income}>{income}</SelectItem>
                             ))}
-                         </select>
-                         <button className="w-2/5 bg-slate-400">Enviar</button>
+                        </Select>
+                        <Input
+                            type="number"
+                            size="sm"
+                            variant={"underlined"}
+                            label="$"
+                            className="w-3/5"
+                        />
+                        <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black">Enviar</button>
                     </div>
                 </div>
             </form>
