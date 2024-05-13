@@ -5,7 +5,7 @@ import { EyeSlashFilledIcon } from "../icons/PasswordTogleIcon";
 import { EyeFilledIcon } from "../icons/PasswordTogleView";
 
 
-export default function Login() {
+export default function SignUp() {
 
     const [isVisible, setIsVisible] = useState(false);
 
@@ -14,7 +14,7 @@ export default function Login() {
     return (
         <Card className="w-full h-full">
             <CardHeader className="flex-col">
-                <h4 className="w-full font-bold text-2xl text-center mt-2">Login</h4>
+                <h4 className="w-full font-bold text-2xl text-center mt-2">Sign Up</h4>
             </CardHeader>
             <CardBody>
                 <Input
@@ -42,10 +42,10 @@ export default function Login() {
                     type={isVisible ? "text" : "password"}
                 />
                 <Checkbox className="mt-8" color="success">Remember me</Checkbox>
-                <Link className="mt-5 w-full text-center" isBlock showAnchorIcon href="/auth/register" color="primary">Want to SignUp instead? go to SignUp</Link>
+                <Link className="mt-5 w-full text-center" isBlock showAnchorIcon href="/auth/login" color="primary">You have an account? go to Login </Link>
             </CardBody>
             <CardFooter className="flex justify-center" >
-                <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black py-4">Login</button>
+                <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black py-4">Sign Up</button>
             </CardFooter>
         </Card>
 
