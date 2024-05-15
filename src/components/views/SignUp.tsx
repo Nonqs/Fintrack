@@ -3,13 +3,21 @@ import { Card, CardBody, CardFooter, CardHeader, Checkbox, Input, Link, Tab, Tab
 import { useState } from "react";
 import { EyeSlashFilledIcon } from "../icons/PasswordTogleIcon";
 import { EyeFilledIcon } from "../icons/PasswordTogleView";
+import { useRouter } from "next/navigation";
 
 
 export default function SignUp() {
 
-    const [isVisible, setIsVisible] = useState(false);
+    const router = useRouter()
 
-    const toggleVisibility = () => setIsVisible(!isVisible);
+    const [isVisible, setIsVisible] = useState(false)
+
+    const toggleVisibility = () => setIsVisible(!isVisible)
+
+    const handleSubmit = () =>{
+
+        router.push("/auth/firstConfigurations")
+    }
 
     return (
         <Card className="w-full h-full">
@@ -45,7 +53,7 @@ export default function SignUp() {
                 <Link className="mt-5 w-full text-center" isBlock showAnchorIcon href="/auth/login" color="primary">You have an account? go to Login </Link>
             </CardBody>
             <CardFooter className="flex justify-center" >
-                <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black py-4">Sign Up</button>
+                <button onClick={handleSubmit} className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black py-4">Sign Up</button>
             </CardFooter>
         </Card>
 

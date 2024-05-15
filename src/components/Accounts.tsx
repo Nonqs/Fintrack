@@ -1,14 +1,28 @@
+"use client"
 import { Divider, Input } from "@nextui-org/react";
+import { useState } from "react";
 
-export default function Accounts(){
-    return(
-        <div className="w-3/5">
+export default function Accounts({getName, accountWidth}) {
+
+    const [accountName, setAccountName] = useState<string>()
+    const [initialCash, setInitialCash] = useState<number | string>()
+
+    const createAccount = () => {
+
+        getName(accountName)
+        setAccountName("")
+        setInitialCash("")
+
+    }
+
+    return (
+        <div className={`${accountWidth}`}>
             <h4 className="text-[#4ade80]">Create new account</h4>
-            <Divider className="mb-2 mt-1" />
+            <Divider className="mb-4 mt-1" />
             <div className="flex">
-                <Input variant="underlined" label="Account name"/>
-                <Input type="number" label="Initial cash" variant="underlined"></Input>
-                <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black">Enviar</button>
+                <Input className="w-3/5" onChange={(e) => { setAccountName(e.target.value) }} variant="underlined" label="Account name" value={accountName}/>
+                <Input className="w-2/5" onChange={(e) => { setInitialCash(parseInt(e.target.value)) }} type="number" label="Initial cash" variant="underlined" value={initialCash}></Input>
+                <button onClick={createAccount} className="border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black">Enviar</button>
             </div>
         </div>
     )

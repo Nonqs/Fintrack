@@ -1,7 +1,9 @@
+"use client"
 import Accounts from "@/components/Accounts";
 import IncomeForm from "@/components/Income";
 import Registers from "@/components/RegisterData";
 import { Card, Divider, Input } from "@nextui-org/react";
+import { useState } from "react";
 
 const registers = [
     {type: "income", date: "11/2/2004", value: 2000},
@@ -13,12 +15,18 @@ const registers = [
 
 export default function Income() {
 
+    const accountWidth = "w-2/3"
+
+    const getName = (accountName: string) => {
+
+    }
+
     return (
         <div className="flex h-full justify-center align-middle mt-20">
             <Card className="w-1/2 h-1/2 p-10 flex">
                 <IncomeForm />
                 <div className="flex mt-10">
-                    <Accounts />
+                    <Accounts getName={getName} accountWidth={accountWidth}/>
                     <div className="w-1/3 ms-5">
                         <h4 className="text-[#4ade80]">New income type</h4>
                         <Divider className="mb-2 mt-1" />
