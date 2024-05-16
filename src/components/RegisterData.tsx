@@ -5,7 +5,7 @@ import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 export default function Registers({ registers }: { registers: Register[] }) {
 
     return (
-        <Card className="w-2/3 overflow-y-scroll">
+        <Card className="w-2/3 overflow-y-auto">
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                 <h4 className="font-bold text-large">Registers</h4>
             </CardHeader>

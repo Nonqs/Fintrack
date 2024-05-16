@@ -2,8 +2,10 @@
 import Accounts from "@/components/Accounts";
 import IncomeForm from "@/components/Income";
 import Registers from "@/components/RegisterData";
+import ShowAccounts from "@/components/accountsAndTypes/ShowAccounts";
+import ShowIncomes from "@/components/accountsAndTypes/ShowIncomes";
 import { LinearChart } from "@/components/charts/LinearChart";
-import { Card, Divider, Input } from "@nextui-org/react";
+import { Card, Divider, Input, Tab, Tabs } from "@nextui-org/react";
 import { useState } from "react";
 
 const registers = [
@@ -43,10 +45,26 @@ export default function Income() {
                     <Registers registers={registers} />
                 </div>
             </div>
-            <div className="h-[50vh] flex justify-center">
-                <Card className="w-1/2 h-[40vh]">
+            <div className="h-[60vh] flex justify-center">
+                <Card className="w-1/2 h-[40.5vh] justify-center">
                     <LinearChart category={"income"} />
                 </Card>
+                <section className="w-1/3 h-[40vh]">
+                    <div className="flex w-full justify-center items-center flex-col">
+                        <Tabs aria-label="Options">
+                            <Tab className="w-full flex justify-center" key="photos" title="Accounts">
+                                <div className="h-[33vh] w-2/3">
+                                    <ShowAccounts />
+                                </div>
+                            </Tab>
+                            <Tab className="w-full flex justify-center" key="music" title="Income Types">
+                                <div className="h-[33vh] w-2/3">
+                                    <ShowIncomes />
+                                </div>
+                            </Tab>
+                        </Tabs>
+                    </div>
+                </section>
             </div>
         </div>
     )

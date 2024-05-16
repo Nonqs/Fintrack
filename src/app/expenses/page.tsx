@@ -2,8 +2,10 @@
 import Accounts from "@/components/Accounts";
 import ExpenseForm from "@/components/Expense";
 import Registers from "@/components/RegisterData";
+import ShowAccounts from "@/components/accountsAndTypes/ShowAccounts";
+import ShowExpenses from "@/components/accountsAndTypes/ShowExpenses";
 import { LinearChart } from "@/components/charts/LinearChart";
-import { Card, Divider, Input } from "@nextui-org/react";
+import { Card, Divider, Input, Tab, Tabs } from "@nextui-org/react";
 
 const registers = [
     { type: "expense", date: "11/2/2004", value: 2000 },
@@ -47,6 +49,22 @@ export default function Expenses() {
                 <Card className="w-1/2 h-[40vh]">
                     <LinearChart category={"expense"} />
                 </Card>
+                <section className="w-1/3 h-[40vh]">
+                    <div className="flex w-full justify-center items-center flex-col">
+                        <Tabs aria-label="Options">
+                            <Tab className="w-full flex justify-center" key="photos" title="Accounts">
+                                <div className="h-[33vh] w-2/3">
+                                    <ShowAccounts />
+                                </div>
+                            </Tab>
+                            <Tab className="w-full flex justify-center" key="music" title="Income Types">
+                                <div className="h-[33vh] w-2/3">
+                                    <ShowExpenses />
+                                </div>
+                            </Tab>
+                        </Tabs>
+                    </div>
+                </section>
             </div>
         </div>
     )
