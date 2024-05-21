@@ -10,58 +10,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
-  id          Int            @id @default(autoincrement())
-  email       String         @unique
-  name        String
-  password    String
-  Accounts    Accounts[]
-  IncomeType  IncomeType[]
-  ExpenseType ExpensesType[]
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  name         String
+  password     String
+  accounts     Account[]
+  incomeTypes  IncomeType[]
+  expenseTypes ExpenseType[]
 }
 
-model Accounts {
-  id       Int        @id @default(autoincrement())
+model Account {
+  id       Int       @id @default(autoincrement())
   icon     String
   name     String
   cash     Int
-  User     User[]
-  Incomes  Incomes[]
-  Expenses Expenses[]
+  userId   Int
+  user     User      @relation(fields: [userId], references: [id])
+  incomes  Income[]
+  expenses Expense[]
 }
 
 model IncomeType {
-  id      Int       @id @default(autoincrement())
+  id      Int      @id @default(autoincrement())
   icon    String
   name    String
-  User    User[]
-  Incomes Incomes[]
+  userId  Int
+  user    User     @relation(fields: [userId], references: [id])
+  incomes Income[]
 }
 
-model ExpensesType {
-  id       Int        @id @default(autoincrement())
+model ExpenseType {
+  id       Int       @id @default(autoincrement())
   icon     String
   name     String
-  User     User[]
-  Expenses Expenses[]
+  userId   Int
+  user     User      @relation(fields: [userId], references: [id])
+  expenses Expense[]
 }
 
-model Incomes {
+model Income {
   id           Int        @id @default(autoincrement())
   amount       Int
   date         DateTime   @default(now())
-  incomeType   IncomeType @relation(fields: [incomeTypeId], references: [id])
   incomeTypeId Int
-  accounts     Accounts   @relation(fields: [accountsId], references: [id])
-  accountsId   Int
+  accountId    Int
+  incomeType   IncomeType @relation(fields: [incomeTypeId], references: [id])
+  account      Account    @relation(fields: [accountId], references: [id])
 }
 
-model Expenses {
-  id             Int          @id @default(autoincrement())
+model Expense {
+  id             Int         @id @default(autoincrement())
   amount         Int
-  date           DateTime     @default(now())
-  expensesType   ExpensesType @relation(fields: [expensesTypeId], references: [id])
+  date           DateTime    @default(now())
   expensesTypeId Int
-  accounts       Accounts     @relation(fields: [accountsId], references: [id])
-  accountsId     Int
+  accountId      Int
+  expensesType   ExpenseType @relation(fields: [expensesTypeId], references: [id])
+  account        Account     @relation(fields: [accountId], references: [id])
 }

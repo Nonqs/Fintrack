@@ -18,9 +18,32 @@ const registers = [
 
 export default function Income() {
 
+    const [typeName, setTypeName] = useState<string>("")
     const accountWidth = "w-2/3"
 
     const getName = (accountName: string) => {
+
+    }
+
+    const handleSubmiteTypes = async(e) => {
+
+        e.preventDefault()
+
+        const response = await fetch("api/incomes", {
+            method: "POST",
+            body: JSON.stringify({
+                typeName
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+
+        if (!response.ok) {
+            throw new Error('Failed to sign up')
+        }
+        const resJson = await response.json()
+        setTypeName("")
 
     }
 
@@ -34,10 +57,12 @@ export default function Income() {
                         <div className="w-1/3 ms-5">
                             <h4 className="text-[#4ade80]">New income type</h4>
                             <Divider className="mb-2 mt-1" />
-                            <div className="flex">
-                                <Input variant="underlined" label="Type name" />
-                                <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black">Enviar</button>
-                            </div>
+                            <form onSubmit={handleSubmiteTypes}>
+                                <div className="flex">
+                                    <Input onChange={(e)=>{setTypeName(e.target.value)}} variant="underlined" label="Type name" value={typeName}/>
+                                    <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black">Enviar</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </Card>

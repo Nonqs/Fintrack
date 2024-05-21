@@ -6,6 +6,7 @@ import ShowAccounts from "@/components/accountsAndTypes/ShowAccounts";
 import ShowExpenses from "@/components/accountsAndTypes/ShowExpenses";
 import { LinearChart } from "@/components/charts/LinearChart";
 import { Card, Divider, Input, Tab, Tabs } from "@nextui-org/react";
+import { useState } from "react";
 
 const registers = [
     { type: "expense", date: "11/2/2004", value: 2000 },
@@ -17,10 +18,33 @@ const registers = [
 
 
 export default function Expenses() {
-
+    
+    const [typeName, setTypeName] = useState<string>("")
     const accountWidth = "w-2/3"
 
     const getName = (accountName: string) => {
+
+    }
+
+    const handleSubmiteTypes = async(e) => {
+
+        e.preventDefault()
+
+        const response = await fetch("api/expenses", {
+            method: "POST",
+            body: JSON.stringify({
+                typeName
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+
+        if (!response.ok) {
+            throw new Error('Failed to sign up')
+        }
+        const resJson = await response.json()
+        setTypeName("")
 
     }
 
@@ -34,10 +58,12 @@ export default function Expenses() {
                         <div className="w-1/3 ms-5">
                             <h4 className="text-[#f87171]">New expense type</h4>
                             <Divider className="mb-2 mt-1" />
-                            <div className="flex">
-                                <Input variant="underlined" label="Type name" />
-                                <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black">Enviar</button>
-                            </div>
+                            <form onSubmit={handleSubmiteTypes}>
+                                <div className="flex">
+                                <Input onChange={(e)=>{setTypeName(e.target.value)}} variant="underlined" label="Type name" value={typeName}/>
+                                    <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black">Enviar</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </Card>
