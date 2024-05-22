@@ -46,10 +46,35 @@ export async function POST(req: NextRequest) {
         data:{
             accountId: account.id,
             amount,
-            incomeTypeId: income.id
+            incomeTypeId: income.id,
+            userId: userId
         }
     })
 
     return NextResponse.json(data)
+
+}
+
+export async function GET(req: NextRequest) {
+
+    const token = await getToken({ req , secret });
+
+    if (!token || !token.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+   
+    let userId: number = token.id
+
+    const registers = await prisma.income.findMany({
+        where:{
+            userId: userId
+        },
+        select:{
+            date: true,
+            amount: true
+        }
+    })
+
+    return NextResponse.json(registers)
 
 }

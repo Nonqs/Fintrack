@@ -10,7 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id           Int           @id @default(autoincrement())
   email        String        @unique
@@ -19,6 +18,8 @@ model User {
   accounts     Account[]
   incomeTypes  IncomeType[]
   expenseTypes ExpenseType[]
+  Income       Income[]
+  Expense      Expense[]
 }
 
 model Account {
@@ -56,8 +57,10 @@ model Income {
   date         DateTime   @default(now())
   incomeTypeId Int
   accountId    Int
+  userId       Int
   incomeType   IncomeType @relation(fields: [incomeTypeId], references: [id])
   account      Account    @relation(fields: [accountId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
 }
 
 model Expense {
@@ -66,6 +69,8 @@ model Expense {
   date           DateTime    @default(now())
   expensesTypeId Int
   accountId      Int
+  userId         Int
   expensesType   ExpenseType @relation(fields: [expensesTypeId], references: [id])
   account        Account     @relation(fields: [accountId], references: [id])
+  user           User        @relation(fields: [userId], references: [id])
 }

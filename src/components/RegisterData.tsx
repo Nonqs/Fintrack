@@ -1,5 +1,6 @@
 import { Register } from "@/types";
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
+import moment from "moment";
 
 
 export default function Registers({ registers }: { registers: Register[] }) {
@@ -12,8 +13,8 @@ export default function Registers({ registers }: { registers: Register[] }) {
             <CardBody className="overflow-visible py-2 flex ">
                 {registers.map((register, index) =>(
                     <div key={index} className={`${register.type === "income" ?("text-[#4ade80]") :("text-[#f87171]")} flex text-center items-center`}>
-                        <small>{register.date}</small>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{register.type === "income" ?(` $${register.value}`) :(`$${register.value}`)}</p>
+                        <small>{moment(register.date).format('YYYY-MM-DD')}</small>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{register.type === "income" ?(` $${register.amount}`) :(`$${register.amount}`)}</p>
                     </div>
                 ))}
             </CardBody>

@@ -6,19 +6,12 @@ import ShowAccounts from "@/components/accountsAndTypes/ShowAccounts";
 import ShowIncomes from "@/components/accountsAndTypes/ShowIncomes";
 import { LinearChart } from "@/components/charts/LinearChart";
 import { Card, Divider, Input, Tab, Tabs } from "@nextui-org/react";
-import { useState } from "react";
-
-const registers = [
-    { type: "income", date: "11/2/2004", value: 2000 },
-    { type: "income", date: "18/2/2004", value: 3000 },
-    { type: "income", date: "11/2/2004", value: 2000 },
-    { type: "income", date: "18/2/2004", value: 3000 },
-    { type: "income", date: "18/2/2004", value: 3000 },
-]
+import { useEffect, useState } from "react";
 
 export default function Income() {
 
     const [typeName, setTypeName] = useState<string>("")
+    const [registers, setRegisters] = useState([])
     const accountWidth = "w-2/3"
 
     const getName = (accountName: string) => {
@@ -36,7 +29,7 @@ export default function Income() {
             }),
             headers: {
                 "Content-Type": "application/json",
-            }
+            } 
         })
 
         if (!response.ok) {
@@ -46,6 +39,28 @@ export default function Income() {
         setTypeName("")
 
     }
+
+    useEffect(()=>{
+
+        const getRegisters = async() =>{
+
+            const res = await fetch("/api/incomes/register", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+
+            const data = await res.json()
+            const newRegisters = data.map(transaction => ({
+                ...transaction,
+                type: 'income'
+              }));
+            setRegisters(newRegisters)
+        }
+
+        getRegisters()
+    }, [])
 
     return (
         <div>

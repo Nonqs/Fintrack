@@ -6,25 +6,40 @@ import ShowAccounts from "@/components/accountsAndTypes/ShowAccounts";
 import ShowExpenses from "@/components/accountsAndTypes/ShowExpenses";
 import { LinearChart } from "@/components/charts/LinearChart";
 import { Card, Divider, Input, Tab, Tabs } from "@nextui-org/react";
-import { useState } from "react";
-
-const registers = [
-    { type: "expense", date: "11/2/2004", value: 2000 },
-    { type: "expense", date: "18/2/2004", value: 3000 },
-    { type: "expense", date: "11/2/2004", value: 2000 },
-    { type: "expense", date: "18/2/2004", value: 3000 },
-    { type: "expense", date: "18/2/2004", value: 3000 },
-]
-
+import { useEffect, useState } from "react";
 
 export default function Expenses() {
     
     const [typeName, setTypeName] = useState<string>("")
+    const [registers, setRegisters] = useState([])
     const accountWidth = "w-2/3"
 
     const getName = (accountName: string) => {
 
     }
+
+    useEffect(()=>{
+
+        const getRegisters = async() =>{
+
+            const res = await fetch("/api/expenses/register", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+
+            const data = await res.json()
+            const newRegisters = data.map(transaction => ({
+                ...transaction,
+                type: 'expense'
+              }));
+            setRegisters(newRegisters)
+            console.log(newRegisters)
+        }
+
+        getRegisters()
+    }, [])
 
     const handleSubmiteTypes = async(e) => {
 
