@@ -4,6 +4,7 @@ import "../styles/global.css"
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider, ThemeProvider } from "next-themes";
 import Navbar from "@/components/Navbar";
+import { AuthProvider } from "./contexts/auth/auth-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,8 +23,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <NextUIProvider>
           <NextThemesProvider attribute="class" defaultTheme="dark">
-            <Navbar />
-            {children}
+            <AuthProvider>
+              <Navbar />
+              {children}
+            </AuthProvider>
           </NextThemesProvider>
         </NextUIProvider>
       </body>
