@@ -18,7 +18,7 @@ export default function Income() {
 
     }
 
-    const handleSubmiteTypes = async(e) => {
+    const handleSubmiteTypes = async (e) => {
 
         e.preventDefault()
 
@@ -29,7 +29,7 @@ export default function Income() {
             }),
             headers: {
                 "Content-Type": "application/json",
-            } 
+            }
         })
 
         if (!response.ok) {
@@ -40,9 +40,9 @@ export default function Income() {
 
     }
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        const getRegisters = async() =>{
+        const getRegisters = async () => {
 
             const res = await fetch("/api/incomes/register", {
                 method: "GET",
@@ -55,7 +55,7 @@ export default function Income() {
             const newRegisters = data.map(transaction => ({
                 ...transaction,
                 type: 'income'
-              }));
+            }));
             setRegisters(newRegisters)
         }
 
@@ -66,7 +66,7 @@ export default function Income() {
         <div>
             <div className="flex h-full justify-center align-middle mt-20 mb-10">
                 <Card className="w-1/2 h-1/2 p-10 flex">
-                    <IncomeForm />
+                    <IncomeForm /> 
                     <div className="flex mt-10">
                         <Accounts getName={getName} accountWidth={accountWidth} />
                         <div className="w-1/3 ms-5">
@@ -74,7 +74,7 @@ export default function Income() {
                             <Divider className="mb-2 mt-1" />
                             <form onSubmit={handleSubmiteTypes}>
                                 <div className="flex">
-                                    <Input onChange={(e)=>{setTypeName(e.target.value)}} variant="underlined" label="Type name" value={typeName}/>
+                                    <Input onChange={(e) => { setTypeName(e.target.value) }} variant="underlined" label="Type name" value={typeName} />
                                     <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black">Enviar</button>
                                 </div>
                             </form>
@@ -86,19 +86,32 @@ export default function Income() {
                 </div>
             </div>
             <div className="h-[60vh] flex justify-center">
-                <Card className="w-1/2 h-[40.5vh] justify-center">
-                    <LinearChart category={"income"} />
-                </Card>
-                <section className="w-1/3 h-[40vh]">
+                <section className="w-1/2 h-[50vh]">
+                    <div className="flex w-full justify-center items-center flex-col">
+                        <Tabs aria-label="Options">
+                            <Tab className="w-full" key="monthly" title="Monthly">
+                                <Card className="h-[40vh]">
+                                    <LinearChart category="income" data={registers} view={"monthly"} />
+                                </Card>
+                            </Tab>
+                            <Tab className="w-full" key="annual" title="annual">
+                                <Card className="h-[40vh]">
+                                    <LinearChart category="income" data={registers} view={"annual"} />
+                                </Card>
+                            </Tab>
+                        </Tabs>
+                    </div>
+                </section>
+                <section className="w-1/3 h-[50vh]">
                     <div className="flex w-full justify-center items-center flex-col">
                         <Tabs aria-label="Options">
                             <Tab className="w-full flex justify-center" key="photos" title="Accounts">
-                                <div className="h-[33vh] w-2/3">
+                                <div className="h-[40vh] w-2/3">
                                     <ShowAccounts />
                                 </div>
                             </Tab>
                             <Tab className="w-full flex justify-center" key="music" title="Income Types">
-                                <div className="h-[33vh] w-2/3">
+                                <div className="h-[40vh] w-2/3">
                                     <ShowIncomes />
                                 </div>
                             </Tab>

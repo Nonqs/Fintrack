@@ -9,7 +9,7 @@ import { Card, Divider, Input, Tab, Tabs } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
 export default function Expenses() {
-    
+
     const [typeName, setTypeName] = useState<string>("")
     const [registers, setRegisters] = useState([])
     const accountWidth = "w-2/3"
@@ -18,9 +18,9 @@ export default function Expenses() {
 
     }
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        const getRegisters = async() =>{
+        const getRegisters = async () => {
 
             const res = await fetch("/api/expenses/register", {
                 method: "GET",
@@ -33,7 +33,7 @@ export default function Expenses() {
             const newRegisters = data.map(transaction => ({
                 ...transaction,
                 type: 'expense'
-              }));
+            }));
             setRegisters(newRegisters)
             console.log(newRegisters)
         }
@@ -41,7 +41,7 @@ export default function Expenses() {
         getRegisters()
     }, [])
 
-    const handleSubmiteTypes = async(e) => {
+    const handleSubmiteTypes = async (e) => {
 
         e.preventDefault()
 
@@ -75,7 +75,7 @@ export default function Expenses() {
                             <Divider className="mb-2 mt-1" />
                             <form onSubmit={handleSubmiteTypes}>
                                 <div className="flex">
-                                <Input onChange={(e)=>{setTypeName(e.target.value)}} variant="underlined" label="Type name" value={typeName}/>
+                                    <Input onChange={(e) => { setTypeName(e.target.value) }} variant="underlined" label="Type name" value={typeName} />
                                     <button className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black">Enviar</button>
                                 </div>
                             </form>
@@ -86,20 +86,33 @@ export default function Expenses() {
                     <Registers registers={registers} />
                 </div>
             </div>
-            <div className="h-[50vh] flex justify-center">
-                <Card className="w-1/2 h-[40vh]">
-                    <LinearChart category={"expense"} />
-                </Card>
-                <section className="w-1/3 h-[40vh]">
+            <div className="h-[60vh] flex justify-center">
+                <section className="w-1/2 h-[50vh]">
+                    <div className="flex w-full justify-center items-center flex-col">
+                        <Tabs aria-label="Options">
+                            <Tab className="w-full" key="monthly" title="Monthly">
+                                <Card className="h-[40vh]">
+                                    <LinearChart category="expenses" data={registers} view={"monthly"} />
+                                </Card>
+                            </Tab>
+                            <Tab className="w-full" key="annual" title="annual">
+                                <Card className="h-[40vh]">
+                                    <LinearChart category="expenses" data={registers} view={"annual"} />
+                                </Card>
+                            </Tab>
+                        </Tabs>
+                    </div>
+                </section>
+                <section className="w-1/3 h-[50vh]">
                     <div className="flex w-full justify-center items-center flex-col">
                         <Tabs aria-label="Options">
                             <Tab className="w-full flex justify-center" key="photos" title="Accounts">
-                                <div className="h-[33vh] w-2/3">
+                                <div className="h-[40vh] w-2/3">
                                     <ShowAccounts />
                                 </div>
                             </Tab>
-                            <Tab className="w-full flex justify-center" key="music" title="Income Types">
-                                <div className="h-[33vh] w-2/3">
+                            <Tab className="w-full flex justify-center" key="music" title="Expense Types">
+                                <div className="h-[40vh] w-2/3">
                                     <ShowExpenses />
                                 </div>
                             </Tab>

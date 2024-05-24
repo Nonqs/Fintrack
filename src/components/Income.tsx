@@ -75,6 +75,7 @@ export default function IncomeForm() {
                 amount
             })
         })
+        const data = response.json()
         setAmount("")
         setAccountName("")
         setIncomeName("")

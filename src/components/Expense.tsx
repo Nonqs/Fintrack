@@ -75,7 +75,7 @@ export default function ExpenseForm() {
     }
 
     return (
-        <div className="mt-10">
+        <div>
             <Link href="/expenses">
                 <div>
                     <h4 className="text-[#f87171] text-xl font-semibold">New Expense</h4>

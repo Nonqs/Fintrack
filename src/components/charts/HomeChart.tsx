@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -10,6 +10,7 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import dayjs from 'dayjs';
 
 ChartJS.register(
     CategoryScale,
@@ -33,36 +34,65 @@ export const options = {
     },
 }
 
-const generateRandomData = (count) => {
-    const data = [];
-    for (let i = 0; i < count; i++) {
-        data.push(Math.floor(Math.random() * 1000));
-    }
-    return data;
-}
-
-const labels = [
-    'January', 'February', 'March', 'April', 'May', 'June', 
+const annualLabels = [
+    'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
-]
+];
 
-const data = {
-    labels,
-    datasets: [
-        {
-            label: 'Incomes',
-            data: generateRandomData(labels.length),
-            backgroundColor: '#4ade80',
-        },
-        {
-            label: 'Expenses',
-            data: generateRandomData(labels.length),
-            backgroundColor: '#f87171',
-        },
-    ],
+const monthlyLabels = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
+
+function processData(data, view) {
+    const result = view === 'annual' ? new Array(12).fill(0) : new Array(31).fill(0);
+
+    data.forEach(({ date, amount, type }) => {
+        const d = dayjs(date);
+        if (view === 'annual') {
+            const month = d.month(); // Devuelve el mes (0-11)
+            result[month] += type === 'income' ? amount : amount;
+        } else {
+            const day = d.date() - 1; // Devuelve el día del mes (1-31)
+            result[day] += type === 'income' ? amount : amount;
+        }
+    });
+
+    return result;
 }
 
-// Función de componente para el gráfico
-export function HomeChart() {
-    return <Bar options={options} data={data} />
+export function HomeChart({ data, view }) {
+
+    const labels = view === 'annual' ? annualLabels : monthlyLabels;
+
+    const incomeData = processData(data.filter(d => d.type === 'income'), view);
+    const expenseData = processData(data.filter(d => d.type === 'expense'), view);
+
+    const chartData = {
+        labels,
+        datasets: [
+            {
+                label: 'Incomes',
+                data: incomeData,
+                backgroundColor: '#4ade80',
+            },
+            {
+                label: 'Expenses',
+                data: expenseData,
+                backgroundColor: '#f87171',
+            },
+        ],
+    };
+
+    const options = {
+        scales: {
+            x: {
+                beginAtZero: true,
+            },
+            y: {
+                beginAtZero: true,
+            },
+        },
+    };
+
+    return (
+        <Bar data={chartData} options={options} />
+    );
 }

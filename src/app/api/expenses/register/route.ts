@@ -25,7 +25,8 @@ export async function POST(req: NextRequest) {
             name: data.accountName
         },
         select:{
-            id: true
+            id: true,
+            cash: true
         }
     })
 
@@ -52,6 +53,15 @@ export async function POST(req: NextRequest) {
         }
     })
 
+    await prisma.account.update({
+        where: {
+            id: account.id
+        },
+        data: {
+            cash: account.cash - amount  
+        }
+    })
+    
     return NextResponse.json(data)
 
 }

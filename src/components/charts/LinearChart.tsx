@@ -12,6 +12,7 @@ import {
     LineElement,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import dayjs from 'dayjs';
 
 ChartJS.register(
     CategoryScale,
@@ -32,67 +33,94 @@ export const options = {
     },
 }
 
-const generateRandomData = (count) => {
-    const data = [];
-    for (let i = 0; i < count; i++) {
-        data.push(Math.floor(Math.random() * 1000));
-    }
-    return data;
-}
 
-const labels = [
-    'January', 'February', 'March', 'April', 'May', 'June', 
+const annualLabels = [
+    'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
-]
+];
 
-// Función de componente para el gráfico
-export function LinearChart({ category }: { category: string }) {
+const monthlyLabels = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
 
-    let data;
+function processData(data, view) {
+    const result = view === 'annual' ? new Array(12).fill(0) : new Array(31).fill(0);
 
-    if (category === "income") {
+    data.forEach(({ date, amount, type }) => {
+        const d = dayjs(date);
+        if (view === 'annual') {
+            const month = d.month(); // Devuelve el mes (0-11)
+            result[month] += type === 'income' ? amount : amount;
+        } else {
+            const day = d.date() - 1; // Devuelve el día del mes (1-31)
+            result[day] += type === 'income' ? amount : amount;
+        }
+    });
 
-        data = {
+    return result;
+}
+export function LinearChart({ category, data, view }: { category: string }) {
+
+    const labels = view === 'annual' ? annualLabels : monthlyLabels;
+
+    const incomeData = processData(data.filter(d => d.type === 'income'), view)
+    const expenseData = processData(data.filter(d => d.type === 'expense'), view)
+
+    let chartData
+    if(category === "income"){
+
+        chartData = {
             labels,
             datasets: [
                 {
                     label: 'Incomes',
-                    data: generateRandomData(labels.length),
+                    data: incomeData,
+                    backgroundColor: '#4ade80',
                     borderColor: '#166534',
-                    backgroundColor: '#bbf7d0',
                 },
                 {
                     label: 'Expenses',
-                    data: generateRandomData(labels.length),
-                    borderColor: '#991b1b',
+                    data: expenseData,
                     backgroundColor: '#f87171',
+                    borderColor: '#991b1b',
                     hidden:true
                 },
             ],
         }
 
     } else {
-
-        data = {
+       
+        chartData = {
             labels,
             datasets: [
                 {
                     label: 'Incomes',
-                    data: generateRandomData(labels.length),
+                    data: incomeData,
+                    backgroundColor: '#4ade80',
                     borderColor: '#166534',
-                    backgroundColor: '#bbf7d0',
                     hidden:true
+
                 },
                 {
                     label: 'Expenses',
-                    data: generateRandomData(labels.length),
-                    borderColor: '#991b1b',
+                    data: expenseData,
                     backgroundColor: '#f87171',
+                    borderColor: '#991b1b',
                 },
             ],
         }
 
     }
+    
+    const options = {
+        scales: {
+            x: {
+                beginAtZero: true,
+            },
+            y: {
+                beginAtZero: true,
+            },
+        },
+    };
 
-    return <Line options={options} data={data} />
+
+    return <Line options={options} data={chartData} />
 }
