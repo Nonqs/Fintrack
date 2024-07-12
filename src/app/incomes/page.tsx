@@ -90,12 +90,12 @@ export default function Income() {
                     <div className="flex w-full justify-center items-center flex-col">
                         <Tabs aria-label="Options">
                             <Tab className="w-full" key="monthly" title="Monthly">
-                                <Card className="h-[40vh]">
+                                <Card className="h-[40vh] flex justify-center items-center">
                                     <LinearChart category="income" data={registers} view={"monthly"} />
                                 </Card>
                             </Tab>
                             <Tab className="w-full" key="annual" title="annual">
-                                <Card className="h-[40vh]">
+                                <Card className="h-[40vh] flex justify-center items-center">
                                     <LinearChart category="income" data={registers} view={"annual"} />
                                 </Card>
                             </Tab>

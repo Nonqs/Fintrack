@@ -3,13 +3,10 @@ import { Card, CardBody, CardFooter, CardHeader, Checkbox, Input, Link, Tab, Tab
 import { useState } from "react";
 import { EyeSlashFilledIcon } from "../icons/PasswordTogleIcon";
 import { EyeFilledIcon } from "../icons/PasswordTogleView";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 
 export default function Login() {
-
-    const router = useRouter()
 
     const [isVisible, setIsVisible] = useState(false)
     const [validate, setValidate] = useState<boolean>()
@@ -45,12 +42,11 @@ export default function Login() {
         const res = await signIn("credentials", {
             email,
             password,
-            redirect: false
+            redirect: true,
+            callbackUrl: 'http://localhost:3000/home'
         })
 
-        if (res.error) return
 
-        router.push("/home")
     }
 
     return (
@@ -95,7 +91,7 @@ export default function Login() {
                     </article>
                 </CardBody>
                 <CardFooter className="flex justify-center" >
-                    <button onSubmit={handleSubmit} className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black py-4">Sign Up</button>
+                    <button onSubmit={handleSubmit} className="w-2/5 border-2 rounded-md transition-colors duration-300  hover:bg-slate-200 hover:text-black py-4">Sign In</button>
                 </CardFooter>
             </form>
         </Card>

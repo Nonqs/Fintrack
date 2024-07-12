@@ -3,24 +3,27 @@ import { Card, CardBody, CardFooter, CardHeader, Checkbox, Input, Link, Tab, Tab
 import { useState } from "react";
 import { EyeSlashFilledIcon } from "../icons/PasswordTogleIcon";
 import { EyeFilledIcon } from "../icons/PasswordTogleView";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 
 export default function SignUp() {
 
-    const router = useRouter()
-
     const [isVisible, setIsVisible] = useState(false)
+    const [isVisibleConfirm, setIsVisibleConfirm] = useState(false)
     const [validate, setValidate] = useState<boolean>()
     const [email, setEmail] = useState<string>()
     const [name, setName] = useState<string>()
     const [password, setPassword] = useState<string>("")
+    const [confirmPassword, setConfirmPassword] = useState<string>("")
     const [error, setError] = useState("")
 
 
     const toggleVisibility = () => {
         setIsVisible(!isVisible)
+    }
+
+    const toggleVisibilityConfirmPassword = () => {
+        setIsVisibleConfirm(!isVisibleConfirm)
     }
 
     const handleSubmit = async (e) => {
@@ -44,37 +47,42 @@ export default function SignUp() {
         setError('')
         setValidate(false)
 
-        try {
-            const response = await fetch("../api/auth/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                    name,
-                    password
+        if(confirmPassword === password){
+
+            try {
+                const response = await fetch("../api/auth/signup", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email,
+                        name,
+                        password
+                    })
                 })
-            })
-
-            if (!response.ok) {
-                throw new Error('Failed to sign up')
+    
+                if (!response.ok) {
+                    throw new Error('Failed to sign up')
+                }
+                const resJson = await response.json()
+                console.log(resJson)
+    
+                const result = await signIn("credentials", {
+                    email,
+                    password,
+                    redirect: true,
+                    callbackUrl: 'http://localhost:3000/auth/firstConfigurations'
+                })
+    
+            } catch (error) {
+                console.error('Error:', error)
+                setError('Failed to sign up. Please try again.')
             }
-            const resJson = await response.json()
-            console.log(resJson)
 
-            const result = await signIn("credentials", {
-                email,
-                password,
-                redirect: false
-            })
-
-            if (result.error) return
-
-            router.push("/auth/firstConfigurations")
-        } catch (error) {
-            console.error('Error:', error)
-            setError('Failed to sign up. Please try again.')
+        }else{
+            setValidate(true)
+            setError('Passwords do not match')
         }
 
     }
@@ -105,7 +113,7 @@ export default function SignUp() {
                         onChange={(e) => { setName(e.target.value) }}
                     />
                     <Input
-                        label="password"
+                        label="Password"
                         isRequired
                         size="sm"
                         className="mb-8"
@@ -124,6 +132,27 @@ export default function SignUp() {
                             </button>
                         }
                         type={isVisible ? "text" : "password"}
+                    />
+                    <Input
+                        label="Confirm Password"
+                        isRequired
+                        size="sm"
+                        className="mb-8"
+                        variant="underlined"
+                        onChange={(e) => { setConfirmPassword(e.target.value), setValidate(false) }}
+                        isInvalid={validate}
+                        color={validate ? "danger" : "default"}
+                        errorMessage={validate && error}
+                        endContent={
+                            <button className="focus:outline-none" type="button" onClick={toggleVisibilityConfirmPassword}>
+                                {isVisibleConfirm ? (
+                                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                                ) : (
+                                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                                )}
+                            </button>
+                        }
+                        type={isVisibleConfirm ? "text" : "password"}
                     />
                     <article className="mb-4 w-full">
                         <Checkbox color="success">Remember me</Checkbox>

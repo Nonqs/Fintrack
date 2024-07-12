@@ -33,7 +33,8 @@ export default function Home() {
 
     return (
         <div className="w-full">
-            <section className="w-full flex justify-center items-center mt-10 mb-10">
+            <section className="w-full flex flex-col justify-center items-center mt-10 mb-10">
+                <h4 className="font-bold text-2xl">Balance</h4>
                 <Card className="w-1/6 h-10 flex justify-center align-middle text-center text-[#4ade80]">
                     <p>${cash}</p>
                 </Card>
@@ -53,12 +54,12 @@ export default function Home() {
                 <div className="flex w-full flex-col items-center">
                     <Tabs aria-label="Options">
                         <Tab className="w-1/2" key="monthly" title="Monthly">
-                            <Card className="h-[40vh] w-full">
+                            <Card className="h-[40vh] w-full flex justify-center items-center">
                                 <HomeChart data={registers} view={"monthly"} />
                             </Card>
                         </Tab>
                         <Tab className="w-1/2" key="annual" title="annual">
-                            <Card className="h-[40vh] w-full">
+                            <Card className="h-[40vh] w-full flex justify-center items-center">
                                 <HomeChart data={registers} view={"annual"} />
                             </Card>
                         </Tab>

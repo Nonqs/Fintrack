@@ -15,14 +15,11 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkSession = async () => {
       const session = await getNextAuthSession();
-      console.log(session);
 
       if (session) {
         setIsLogged(true);
-        console.log("is logged");
       } else {
         setIsLogged(false);
-        console.log("is not logged");
       }
     };
 
